@@ -1,0 +1,81 @@
+---
+kind: pipeline
+type: docker
+name: build-ce-docker
+
+trigger:
+  branch:
+    - develop
+    - master
+  event:
+    - push
+    - tag
+
+steps:
+  - name: strip-enterprise-code
+    image: alpine:3.19
+    commands:
+      - rm -rf enterprise
+      - rm -rf spec/enterprise
+
+  - name: set-chatwoot-edition
+    image: alpine:3.19
+    commands:
+      - echo -en '\nENV CW_EDITION="ce"' >> docker/Dockerfile
+
+  - name: build-and-push
+    image: thegeeklab/drone-docker-buildx:24
+    privileged: true
+    settings:
+      repo: boro/chatwoot
+      dockerfile: docker/Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      username:
+        from_secret: dockerhub_username
+      password:
+        from_secret: dockerhub_token
+      tags:
+        - ${DRONE_BRANCH}-ce
+    when:
+      branch:
+        - develop
+
+  - name: build-and-push-master
+    image: thegeeklab/drone-docker-buildx:24
+    privileged: true
+    settings:
+      repo: boro/chatwoot
+      dockerfile: docker/Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      username:
+        from_secret: dockerhub_username
+      password:
+        from_secret: dockerhub_token
+      tags:
+        - latest-ce
+    when:
+      branch:
+        - master
+
+  - name: build-and-push-tag
+    image: thegeeklab/drone-docker-buildx:24
+    privileged: true
+    settings:
+      repo: boro/chatwoot
+      dockerfile: docker/Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      username:
+        from_secret: dockerhub_username
+      password:
+        from_secret: dockerhub_token
+      tags:
+        - ${DRONE_TAG}-ce
+    when:
+      event:
+        - tag
