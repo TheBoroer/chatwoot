@@ -209,6 +209,7 @@ gem 'shopify_api'
 ##############################################################
 
 group :production do
+  gem 'cloudflare-rails'
   # we dont want request timing out in development while using byebug
   gem 'rack-timeout'
   # for heroku autoscaling
