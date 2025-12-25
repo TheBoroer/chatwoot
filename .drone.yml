@@ -29,9 +29,9 @@ steps:
     settings:
       repo: boro/chatwoot
       dockerfile: docker/Dockerfile
-      platforms:
-        - linux/amd64
-        # - linux/arm64
+      # platforms:
+      #   - linux/amd64
+      #   - linux/arm64
       username:
         from_secret: dockerhub_username
       password:
@@ -48,9 +48,9 @@ steps:
     settings:
       repo: boro/chatwoot
       dockerfile: docker/Dockerfile
-      platforms:
-        - linux/amd64
-        # - linux/arm64
+      # platforms:
+      #   - linux/amd64
+      #   - linux/arm64
       username:
         from_secret: dockerhub_username
       password:
@@ -67,9 +67,9 @@ steps:
     settings:
       repo: boro/chatwoot
       dockerfile: docker/Dockerfile
-      platforms:
-        - linux/amd64
-        # - linux/arm64
+      # platforms:
+      #   - linux/amd64
+      #   - linux/arm64
       username:
         from_secret: dockerhub_username
       password:
