@@ -12,6 +12,9 @@ trigger:
     - tag
     - manual
 
+clone:
+  depth: 1
+
 steps:
   - name: strip-enterprise-code
     image: alpine:3.19
@@ -39,6 +42,9 @@ steps:
         from_secret: dockerhub_token
       tags:
         - ${DRONE_BRANCH}-ce
+      cache_from:
+        - 'type=registry\\,ref=boro/chatwoot:buildcache-ce'
+      cache_to: type=registry,ref=boro/chatwoot:buildcache-ce,mode=max
     when:
       branch:
         - develop
@@ -58,6 +64,8 @@ steps:
         from_secret: dockerhub_token
       tags:
         - latest-ce
+      cache_from:
+        - 'type=registry\\,ref=boro/chatwoot:buildcache-ce'
     when:
       branch:
         - master
@@ -77,6 +85,8 @@ steps:
         from_secret: dockerhub_token
       tags:
         - ${DRONE_TAG}-ce
+      cache_from:
+        - 'type=registry\\,ref=boro/chatwoot:buildcache-ce'
     when:
       event:
         - tag
